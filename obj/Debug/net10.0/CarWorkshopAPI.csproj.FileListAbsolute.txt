@@ -216,3 +216,5 @@ D:\WebAPI Projects\CarWorkshopAPI\CarWorkshopAPI\obj\Debug\net10.0\refint\CarWor
 D:\WebAPI Projects\CarWorkshopAPI\CarWorkshopAPI\obj\Debug\net10.0\CarWorkshopAPI.pdb
 D:\WebAPI Projects\CarWorkshopAPI\CarWorkshopAPI\obj\Debug\net10.0\CarWorkshopAPI.genruntimeconfig.cache
 D:\WebAPI Projects\CarWorkshopAPI\CarWorkshopAPI\obj\Debug\net10.0\ref\CarWorkshopAPI.dll
+D:\WebAPI Projects\CarWorkshopAPI\CarWorkshopAPI\obj\Debug\net10.0\CarWorkshopAPI.sourcelink.json
+D:\WebAPI Projects\CarWorkshopAPI\CarWorkshopAPI\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

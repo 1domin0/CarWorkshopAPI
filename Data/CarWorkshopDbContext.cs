@@ -11,6 +11,7 @@ public class CarWorkshopDbContext : DbContext
     public DbSet<Vehicle> Vehicles { get; set; }
     public DbSet<TechnicalPassport> TechnicalPassports { get; set; }
     public DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
