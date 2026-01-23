@@ -4,4 +4,4 @@ using MediatR;
 
 namespace CarWorkshopAPI.Commands.AddVehicle;
 
-public record AddVehicleCommand(VehicleInfoDto dto) : IRequest<int>;
+public record AddVehicleCommand(VehicleInfoDto Dto) : IRequest<int>;

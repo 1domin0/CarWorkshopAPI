@@ -18,7 +18,7 @@ public class AddVehicleHandler : IRequestHandler<AddVehicleCommand, int>
     
     public async Task<int> Handle(AddVehicleCommand request, CancellationToken cancellationToken)
     {
-        var vehicle = _mapper.Map<Vehicle>(request.dto);
+        var vehicle = _mapper.Map<Vehicle>(request.Dto);
         _context.Vehicles.Add(vehicle);
         
         await _context.SaveChangesAsync();

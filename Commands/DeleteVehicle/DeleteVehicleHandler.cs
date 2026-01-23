@@ -3,15 +3,8 @@ using MediatR;
 
 namespace CarWorkshopAPI.Commands.DeleteVehicle;
 
-public class DeleteVehicleHandler : IRequestHandler<DeleteVehicleCommand>
+public class DeleteVehicleHandler(CarWorkshopDbContext _context) : IRequestHandler<DeleteVehicleCommand>
 {
-    private readonly CarWorkshopDbContext _context;
-
-    public DeleteVehicleHandler(CarWorkshopDbContext context)
-    {
-        _context = context;
-    }
-    
     public async Task Handle(DeleteVehicleCommand request, CancellationToken cancellationToken)
     {
         var vehicle = await _context.Vehicles.FindAsync(request.Id);

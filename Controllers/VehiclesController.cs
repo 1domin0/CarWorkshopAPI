@@ -1,14 +1,9 @@
-using AutoMapper;
 using CarWorkshopAPI.Commands.AddVehicle;
 using CarWorkshopAPI.Commands.DeleteVehicle;
-using CarWorkshopAPI.Data;
 using CarWorkshopAPI.Dtos;
-using CarWorkshopAPI.Models;
 using CarWorkshopAPI.Queries.GetVehicle;
 using CarWorkshopAPI.Queries.GetVehicles;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
@@ -17,17 +12,8 @@ namespace CarWorkshopAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class VehiclesController : ControllerBase
+public class VehiclesController(IMediator _mediator) : ControllerBase
 {
-    private readonly CarWorkshopDbContext _context;
-    private readonly IMapper _mapper;
-    private readonly IMediator _mediator;
-    public VehiclesController(CarWorkshopDbContext context, IMapper mapper, IMediator mediator)
-    {
-        _context = context;
-        _mapper = mapper;
-        _mediator = mediator;
-    }
 
     // [Authorize(Roles = "Admin")]
     [HttpPut]

@@ -1,9 +1,10 @@
 using System.Security.Claims;
-using AutoMapper;
-using CarWorkshopAPI.Data;
+using CarWorkshopAPI.Commands.Login;
+using CarWorkshopAPI.Commands.Register;
 using CarWorkshopAPI.Dtos;
 using CarWorkshopAPI.Models;
 using CarWorkshopAPI.Services.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -13,28 +14,19 @@ namespace CarWorkshopAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class AuthController(IMediator _mediator) : ControllerBase
 {
-    private readonly CarWorkshopDbContext _context;
-    private readonly IAuthService _authService;
-    public AuthController(CarWorkshopDbContext context, IAuthService authService)
-    {
-        _context = context;
-        _authService = authService;
-    }
-
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterDto dto)
     {
-        await _authService.RegisterAsync(dto);
+        await _mediator.Send(new RegisterCommand(dto));
         return NoContent();
     }
 
     [HttpPost("login")]
     public async Task<ActionResult<User>> Login(LoginDto dto)
     {
-        var token = await _authService.LoginAsync(dto);
-        
+        var token = await _mediator.Send(new LoginCommand(dto));
         if (token == null) return Unauthorized();
         
         return Ok(new { token });
