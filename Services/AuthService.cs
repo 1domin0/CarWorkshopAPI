@@ -25,13 +25,11 @@ public class AuthService : IAuthService
 
     public async Task RegisterAsync(RegisterDto dto)
     {
-        var existingUser = _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username);
-
-        if (existingUser != null)
-        {
+        var existingUser = await _context.Users.AnyAsync(u => u.Username == dto.Username);
+        
+        if (existingUser)
             throw new InvalidOperationException("Username already exists");
-        }
-
+        
         var user = new User
         {
             Username = dto.Username,
@@ -45,14 +43,12 @@ public class AuthService : IAuthService
     
     public async Task<string?> LoginAsync(LoginDto dto)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Username == dto.Username);
-        if (user != null) return null;
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username);
+        if (user == null) return null;
         
         var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
         
-        if(result != PasswordVerificationResult.Success) return null;
-        
-        return  GenerateJwtToken(user);
+        return result is not PasswordVerificationResult.Success ? null : GenerateJwtToken(user);
     }
     
     public string GenerateJwtToken(User user)

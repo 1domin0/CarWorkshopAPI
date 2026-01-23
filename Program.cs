@@ -31,6 +31,7 @@ builder.Services.AddDbContext<CarWorkshopDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CarWorkshopDbContext).Assembly));
 
 builder.Services.AddAutoMapper(cfg => 
 {

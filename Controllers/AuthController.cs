@@ -1,8 +1,10 @@
+using System.Security.Claims;
 using AutoMapper;
 using CarWorkshopAPI.Data;
 using CarWorkshopAPI.Dtos;
 using CarWorkshopAPI.Models;
 using CarWorkshopAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +15,11 @@ namespace CarWorkshopAPI.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
+    private readonly CarWorkshopDbContext _context;
     private readonly IAuthService _authService;
-    public AuthController(IAuthService authService)
+    public AuthController(CarWorkshopDbContext context, IAuthService authService)
     {
+        _context = context;
         _authService = authService;
     }
 
@@ -34,5 +38,17 @@ public class AuthController : ControllerBase
         if (token == null) return Unauthorized();
         
         return Ok(new { token });
+    }
+    
+    [Authorize]
+    [HttpGet("me")]
+    public IActionResult Me()
+    {
+        return Ok(new
+        {
+            Id = User.FindFirstValue(ClaimTypes.NameIdentifier),
+            Username = User.Identity?.Name,
+            Role = User.FindFirstValue(ClaimTypes.Role)
+        });
     }
 }
