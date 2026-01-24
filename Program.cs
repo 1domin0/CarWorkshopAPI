@@ -1,10 +1,12 @@
 using System.Text;
 using CarWorkshopAPI.Data;
+using CarWorkshopAPI.Middleware;
 using CarWorkshopAPI.Models;
 using CarWorkshopAPI.Profiles;
 using CarWorkshopAPI.Services;
 using CarWorkshopAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -59,6 +61,8 @@ builder.Services.AddAuthentication(option =>
 });
 
 var app = builder.Build();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 
 app.UseSwagger();
 app.UseSwaggerUI();
