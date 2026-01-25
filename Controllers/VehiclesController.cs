@@ -1,5 +1,6 @@
 using CarWorkshopAPI.Commands.AddVehicle;
 using CarWorkshopAPI.Commands.DeleteVehicle;
+using CarWorkshopAPI.Commands.UpdateVehicle;
 using CarWorkshopAPI.Dtos;
 using CarWorkshopAPI.Queries.GetVehicle;
 using CarWorkshopAPI.Queries.GetVehicles;
@@ -16,7 +17,7 @@ public class VehiclesController(IMediator _mediator) : ControllerBase
 {
 
     // [Authorize(Roles = "Admin")]
-    [HttpPut]
+    [HttpPost]
     public async Task<IActionResult> AddVehicle(VehicleInfoDto vehicleInfoDto)
     {
         var vehicleId = await _mediator.Send(new AddVehicleCommand(vehicleInfoDto));
@@ -33,11 +34,17 @@ public class VehiclesController(IMediator _mediator) : ControllerBase
     public async Task<ActionResult<VehicleInfoDto>> GetVehicleById(int id)
     {
         var vehicle = await _mediator.Send(new GetVehicleByIdQuery(id));
-        
-        if (vehicle == null) return NotFound();
+
         return Ok(vehicle);
     }
 
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateVehicle(int id, VehicleInfoDto vehicleInfoDto)
+    {
+        await _mediator.Send(new UpdateVehicleCommand(id, vehicleInfoDto));
+        return NoContent();
+    }
+    
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteVehicle(int id)
     {

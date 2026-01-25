@@ -14,7 +14,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate _next, ILogger<Exceptio
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ex.Message);
+            _logger.LogError(ex.Message);
             await HandleException(context, ex);
         }
     }
@@ -31,12 +31,15 @@ public class ExceptionHandlingMiddleware(RequestDelegate _next, ILogger<Exceptio
                 message = exception.Message;
                 break;
             case UnauthorizedAccessException:
-                statusCode = HttpStatusCode.Unauthorized;
+                statusCode = HttpStatusCode.Unauthorized; //401
                 message = "Unauthorized";
                 break;
-            
+            case KeyNotFoundException:
+                statusCode = HttpStatusCode.NotFound; //404
+                message = exception.Message;
+                break;
             default:
-                statusCode = HttpStatusCode.InternalServerError;
+                statusCode = HttpStatusCode.InternalServerError; //500
                 message = "An unexpected error";
                 break;
         }

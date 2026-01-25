@@ -8,6 +8,7 @@ public class LoginHandler(IAuthService _authService) : IRequestHandler<LoginComm
 {
     public async Task<string?> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        return await _authService.LoginAsync(request.Dto);
+        var token = await _authService.LoginAsync(request.Dto);
+        return token ?? throw new UnauthorizedAccessException();
     }
 }
