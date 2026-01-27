@@ -8,6 +8,7 @@ public class RegisterHandler(IAuthService _authService) : IRequestHandler<Regist
 {
     public async Task Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
+        
         await _authService.RegisterAsync(request.Dto);
     }
 }

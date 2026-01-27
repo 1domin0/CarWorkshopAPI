@@ -1,10 +1,14 @@
 using System.Text;
+using CarWorkshopAPI.Commands.Register;
+using CarWorkshopAPI.Common.Behaviors;
 using CarWorkshopAPI.Data;
 using CarWorkshopAPI.Middleware;
 using CarWorkshopAPI.Models;
 using CarWorkshopAPI.Profiles;
 using CarWorkshopAPI.Services;
 using CarWorkshopAPI.Services.Interfaces;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +26,6 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Add services to the container.
 
-builder.Services.AddControllers();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -33,7 +36,15 @@ builder.Services.AddDbContext<CarWorkshopDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CarWorkshopDbContext).Assembly));
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(CarWorkshopDbContext).Assembly);
+    
+    cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+});
+
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
+// builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 builder.Services.AddAutoMapper(cfg => 
 {

@@ -18,14 +18,14 @@ public class VehiclesController(IMediator _mediator) : ControllerBase
 {
 
     // [Authorize(Roles = "Admin")]
-    [HttpPost]
+    [HttpPost("Add")]
     public async Task<IActionResult> AddVehicle(VehicleInfoDto vehicleInfoDto)
     {
         var vehicleId = await _mediator.Send(new AddVehicleCommand(vehicleInfoDto));
         return CreatedAtAction(nameof(GetVehicleById), new { id = vehicleId }, null);
     }
     // [Authorize]
-    [HttpGet]
+    [HttpGet("GetAll")]
     public async Task<ActionResult<List<VehicleInfoDto>>> GetVehicles()
     {
         return Ok(await _mediator.Send(new GetVehiclesQuery()));
@@ -44,14 +44,14 @@ public class VehiclesController(IMediator _mediator) : ControllerBase
     {
         return Ok(await _mediator.Send(new GetVehiclesByBrandQuery(brandName)));
     }
-    [HttpPut("{id}")]
+    [HttpPut("Update/{id}")]
     public async Task<IActionResult> UpdateVehicle(int id, VehicleInfoDto vehicleInfoDto)
     {
         await _mediator.Send(new UpdateVehicleCommand(id, vehicleInfoDto));
         return NoContent();
     }
     
-    [HttpDelete("{id}")]
+    [HttpDelete("Delete/{id}")]
     public async Task<IActionResult> DeleteVehicle(int id)
     {
         await _mediator.Send(new DeleteVehicleCommand(id));
