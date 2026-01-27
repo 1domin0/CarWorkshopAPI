@@ -4,6 +4,7 @@ using CarWorkshopAPI.Commands.UpdateVehicle;
 using CarWorkshopAPI.Dtos;
 using CarWorkshopAPI.Queries.GetVehicle;
 using CarWorkshopAPI.Queries.GetVehicles;
+using CarWorkshopAPI.Queries.GetVehiclesByBrand;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +31,7 @@ public class VehiclesController(IMediator _mediator) : ControllerBase
         return Ok(await _mediator.Send(new GetVehiclesQuery()));
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("GetById/{id}")]
     public async Task<ActionResult<VehicleInfoDto>> GetVehicleById(int id)
     {
         var vehicle = await _mediator.Send(new GetVehicleByIdQuery(id));
@@ -38,6 +39,11 @@ public class VehiclesController(IMediator _mediator) : ControllerBase
         return Ok(vehicle);
     }
 
+    [HttpGet("GetByBrand/{brandName}")]
+    public async Task<ActionResult<List<VehicleInfoDto>>> GetVehiclesByBrand(string brandName)
+    {
+        return Ok(await _mediator.Send(new GetVehiclesByBrandQuery(brandName)));
+    }
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateVehicle(int id, VehicleInfoDto vehicleInfoDto)
     {
