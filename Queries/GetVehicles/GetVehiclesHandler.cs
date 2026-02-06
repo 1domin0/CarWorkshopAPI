@@ -38,6 +38,15 @@ public class GetVehiclesHandler(CarWorkshopDbContext _context, IMapper _mapper) 
             };
         }
         
+        var page = request.Page ?? 1;
+        var pageSize = request.PageSize ?? 10;
+        
+        if (page < 0) page = 1;
+        if (pageSize < 0) pageSize = 10;
+        
+        var skip = (page - 1) * pageSize;
+        query = query.Skip(skip).Take(pageSize);
+        
         var vehicles = await query.ToListAsync();
         return _mapper.Map<List<VehicleInfoDto>>(vehicles);
     }
