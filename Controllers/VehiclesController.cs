@@ -17,21 +17,22 @@ namespace CarWorkshopAPI.Controllers;
 public class VehiclesController(IMediator _mediator) : ControllerBase
 {
 
-    // [Authorize(Roles = "Admin")]
-    [HttpPost("Add")]
+    // [Authorize]
+    [HttpPost]
     public async Task<IActionResult> AddVehicle(VehicleInfoDto vehicleInfoDto)
     {
         var vehicleId = await _mediator.Send(new AddVehicleCommand(vehicleInfoDto));
         return CreatedAtAction(nameof(GetVehicleById), new { id = vehicleId }, null);
     }
-    // [Authorize]
-    [HttpGet("GetAll")]
-    public async Task<ActionResult<List<VehicleInfoDto>>> GetVehicles()
-    {
-        return Ok(await _mediator.Send(new GetVehiclesQuery()));
-    }
 
-    [HttpGet("GetById/{id}")]
+    [HttpGet]
+    public async Task<ActionResult<List<VehicleInfoDto>>> GetVehicles( [FromQuery] GetVehiclesQuery request)
+    {
+        return Ok(await _mediator.Send(request));
+    }
+    
+    // [Authorize(Roles = "Admin")]
+    [HttpGet("{id}")]
     public async Task<ActionResult<VehicleInfoDto>> GetVehicleById(int id)
     {
         var vehicle = await _mediator.Send(new GetVehicleByIdQuery(id));
@@ -39,19 +40,14 @@ public class VehiclesController(IMediator _mediator) : ControllerBase
         return Ok(vehicle);
     }
 
-    [HttpGet("GetByBrand/{brandName}")]
-    public async Task<ActionResult<List<VehicleInfoDto>>> GetVehiclesByBrand(string brandName)
-    {
-        return Ok(await _mediator.Send(new GetVehiclesByBrandQuery(brandName)));
-    }
-    [HttpPut("Update/{id}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> UpdateVehicle(int id, VehicleInfoDto vehicleInfoDto)
     {
         await _mediator.Send(new UpdateVehicleCommand(id, vehicleInfoDto));
         return NoContent();
     }
     
-    [HttpDelete("Delete/{id}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteVehicle(int id)
     {
         await _mediator.Send(new DeleteVehicleCommand(id));
